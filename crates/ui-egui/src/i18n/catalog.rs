@@ -95,3 +95,4 @@ pub fn placeholders(s: &str) -> Vec<&str> {
     }
     out
 }
+Self:: Bn => BENGALI.get_or_init(|| Catalog::pares(include_str!("bn.tsv"))),

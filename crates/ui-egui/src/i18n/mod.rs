@@ -34,6 +34,7 @@ pub enum Language {
     #[default]
     En,
     Ja,
+    Bn,
     Es,
     /// Persisted as `pt-br` (the blanket `rename_all` would produce `ptbr`).
     #[serde(rename = "pt-br")]
@@ -55,9 +56,10 @@ static CHINESE: OnceLock<Catalog> = OnceLock::new();
 static GERMAN: OnceLock<Catalog> = OnceLock::new();
 static RUSSIAN: OnceLock<Catalog> = OnceLock::new();
 static FRENCH: OnceLock<Catalog> = OnceLock::new();
+static BANGLA: OnceLock<Catalog> = OnceLock::new();
 
 impl Language {
-    pub const ALL: [Self; 9] = [Self::En, Self::Ja, Self::Es, Self::PtBr, Self::Uk, Self::ZhCn, Self::De, Self::Ru, Self::Fr];
+    pub const ALL: [Self; 9] = [Self::En, Self::Ja, Self::Es, Self::PtBr, Self::Uk, Self::ZhCn, Self::De, Self::Ru, Self::Fr,Self::Bn];
 
     pub fn name(self) -> &'static str {
         match self {
@@ -70,6 +72,7 @@ impl Language {
             Self::De => "Deutsch",
             Self::Ru => "Русский",
             Self::Fr => "Français",
+            Self::Bn => "বাংলা",
         }
     }
 
@@ -84,6 +87,7 @@ impl Language {
             "de" => Some(Self::De),
             "ru" => Some(Self::Ru),
             "fr" => Some(Self::Fr),
+            "bn" => Some(Self::Bn),
             _ => None,
         }
     }
@@ -96,7 +100,7 @@ impl Language {
     /// only for Simplified locales (`zh`, `zh-CN`, `zh-SG`, `zh-Hans…`); Traditional ones (`zh-TW`,
     /// `zh-HK`, `zh-MO`, `zh-Hant…`) are skipped.
     pub fn from_locales(tags: &[String]) -> Self {
-        const PRIMARY: [(&str, Language); 8] = [
+        const PRIMARY: [(&str, Language); 9] = [
             ("en", Language::En),
             ("ja", Language::Ja),
             ("es", Language::Es),
@@ -105,6 +109,7 @@ impl Language {
             ("de", Language::De),
             ("ru", Language::Ru),
             ("fr", Language::Fr),
+            ("bn", Language::Bn),
         ];
         tags.iter()
             .find_map(|tag| {
@@ -134,6 +139,7 @@ impl Language {
             Self::De => "de",
             Self::Ru => "ru",
             Self::Fr => "fr",
+            Self::Bn => "bn",
         }
     }
 
@@ -149,6 +155,7 @@ impl Language {
             Self::De => Some(GERMAN.get_or_init(|| Catalog::parse(include_str!("de.tsv")))),
             Self::Ru => Some(RUSSIAN.get_or_init(|| Catalog::parse(include_str!("ru.tsv")))),
             Self::Fr => Some(FRENCH.get_or_init(|| Catalog::parse(include_str!("fr.tsv")))),
+            Self::Bn => Some(BANGLA.get_or_init(|| Catalog::parse(include_str!("bn.tsv")))),
         }
     }
 
